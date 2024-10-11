@@ -15,6 +15,13 @@ const oneCard = {
   video_id: "aaaa",
 };
 
+function getTimeString(time) {
+  const hour = parseInt(parseInt(time) / 3600);
+  const min = parseInt(parseInt(time % 3600) / 60);
+  const sec = parseInt(time % 3600) % 60;
+  return `${hour} hrs ${min} min ${sec} sec ago `;
+}
+
 function displayVideos(data) {
   console.log(data.videos);
 
@@ -22,16 +29,34 @@ function displayVideos(data) {
   data.videos.forEach((element) => {
     const div = document.createElement("div");
     div.classList = "card card-compact";
-    div.innerHTML = `<figure>
+    div.innerHTML = `<figure class="h-[200px] rounded-lg relative">
     <img
       src=${element.thumbnail}
-      alt="Shoes" />
+      alt="Shoes"
+      class="h-full w-full object-cover" />
+      ${
+        element.others.posted_date
+          ? `<span class="absolute bg-black rounded p-1 text-white right-2 bottom-2"> ${getTimeString(
+              element.others.posted_date
+            )} </span>`
+          : ""
+      }
   </figure>
-  <div class="card-body">
-    <h2 class="card-title">Shoes!</h2>
-    <p>If a dog chews shoes whose shoes does he choose?</p>
-    <div class="card-actions justify-end">
-      <button class="btn btn-primary">Buy Now</button>
+  <div class="flex gap-3 py-5">
+    <img src=${
+      element.authors[0].profile_picture
+    } class="w-10 h-10 rounded-full object-cover"/>
+    <div class="">    
+    <h2 class="text-base font-bold">${element.title}</h2>
+    <div class="flex items-center gap-2" >     
+    <p class="py-2 text-sm">${element.authors[0].profile_name}</p>
+    ${
+      element.authors[0].verified
+        ? '<img class="w-5 h-5" src="https://img.icons8.com/?size=100&id=SRJUuaAShjVD&format=png&color=000000"/>'
+        : ""
+    }
+    </div>
+    <p class="text-sm">${element.others.views}</p>
     </div>
   </div>`;
     videos.appendChild(div);
